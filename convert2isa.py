@@ -1,0 +1,100 @@
+from isatools.model.v1 import *
+import xml.dom.minidom
+
+dom = xml.dom.minidom.parse('/Users/xiaosizhe/Desktop/api100194.xml')
+root = dom.documentElement
+
+data = root.getElementsByTagName('dataset')
+dataset = data[0]
+
+print(dataset.nodeName)
+
+investigation = Investigation()
+investigation.studies.append(Study())
+
+
+# ------------ dataset ---------------
+
+investigation.studies[0].filename = "s_study.txt"
+investigation.studies[0].identifier = "10.5524/111111"
+investigation.studies[0].title = "test dataset"
+investigation.studies[0].description = "this is test dataset"
+investigation.studies[0].public_release_date = "2016/11/11"
+
+# submitter
+contact = Person(first_name="Alice", last_name="Robertson", affiliation="University of Life", email="tt@tt.com", roles="submitter")
+investigation.studies[0].contacts.append(contact)
+
+publication = Publication(doi="10.5524/test.1");
+investigation.studies[0].publications.append(publication)
+
+#Data Repository
+investigation.studies[0].comments = []
+comment1 = Comment(name="Data Repository", value="ftp://climb.genomics.cn")
+investigation.studies[0].comments.append(comment1)
+
+#Data Record Accession
+comment2 = Comment(name="Data Record Accession", value="ftp://climb.genomics.cn")
+investigation.studies[0].comments.append(comment2)
+
+##funder
+comment3 = Comment(name="Funder Term Source REF", value="ftp://climb.genomics.cn") # funder url
+investigation.studies[0].comments.append(comment3)
+comment4 = Comment(name="Grant Identifier", value="National ....") # funder award
+investigation.studies[0].comments.append(comment4)
+comment5 = Comment(name="Awardee", value="National ....") # funder comment
+investigation.studies[0].comments.append(comment5)
+
+##publication
+comment6 = Comment(name="Data Repository", value="GigaScience database") # publication
+investigation.studies[0].comments.append(comment6)
+
+##author
+author1 = Person(first_name="Alice", last_name="Robertson", roles="author")
+#if contain orcid
+comment7 = Comment(name="Study Person ORCID", value="111111-22221-00000")
+investigation.studies[0].comments.append(comment7)
+
+##dataset type eg. Genomics
+comment8 = Comment(name="Subject Keywords", value="Genomics")
+investigation.studies[0].comments.append(comment8)
+
+##dataset keyword
+comment9 = Comment(name="key", value="rna sequences")
+investigation.studies[0].comments.append(comment9)
+
+# ------------ sample ---------------
+
+investigation.studies[0].samples=[]
+sample = Sample(name="SAMEA3518466") #sample name
+characteristic1 = Characteristic(category="Organism", value="Homo sapiens")
+sample.characteristics.append(characteristic1)
+characteristic2 = Characteristic(category="Term Source Ref", value="NCBITaxon")
+sample.characteristics.append(characteristic2)
+characteristic3 = Characteristic(category="Term Accession Number", value="http://")  #eol_link not need now
+sample.characteristics.append(characteristic3)
+
+# sample attribute
+
+characteristic4 = Characteristic(category="geolocation", value="10.222/2.00002222")  #eol_link not need now
+sample.characteristics.append(characteristic4)
+
+
+investigation.studies[0].samples.append(sample)
+
+
+# ------------ file ---------------
+
+assay = Assay(filename="a_assay.txt")
+
+datafile = DataFile(filename="ftp://xxxxxxxxx")
+datafile.comments = []
+comment10 = Comment(name="File Description", value="test file")
+datafile.comments.append(comment10)
+
+
+assay.data_files.append(datafile)
+
+
+
+
