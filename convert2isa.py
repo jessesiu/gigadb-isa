@@ -23,16 +23,12 @@ def create_descriptor():
     investigation.studies[0].description = "this is test dataset"
     investigation.studies[0].public_release_date = "2016/11/11"
 
-
-    publication = Publication(title="Experiments with Elephants", author_list="A. Robertson, B. Robertson")
-    publication.status = OntologyAnnotation(term="published")
-    investigation.studies[0].publications.append(publication)
-
     # submitter
     contact = Person(first_name="Alice", last_name="Robertson", affiliation="University of Life", email="tt@tt.com", roles="submitter")
     investigation.studies[0].contacts.append(contact)
 
-    publication = Publication(doi="10.5524/test.1");
+    publication = Publication(doi="10.5524/manuscript10002")
+    publication.status = OntologyAnnotation(term="published")
     investigation.studies[0].publications.append(publication)
 
     #Data Repository
