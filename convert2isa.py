@@ -24,7 +24,7 @@ def create_descriptor():
     investigation.studies[0].public_release_date = "2016/11/11"
 
     # submitter
-    contact = Person(first_name="Alice", last_name="Robertson", affiliation="University of Life", email="tt@tt.com", roles="submitter")
+    contact = Person(first_name="Alice", last_name="Robertson", affiliation="University of Life", email="tt@tt.com", roles=[OntologyAnnotation(term='submitter')])
     investigation.studies[0].contacts.append(contact)
 
     publication = Publication(doi="10.5524/manuscript10002")
