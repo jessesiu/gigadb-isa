@@ -69,8 +69,7 @@ def create_descriptor():
     # ------------ sample ---------------
     source = Source(name='source_material')
     investigation.studies[0].materials['sources'].append(source)
-    prototype_sample = Sample(name='sample_material', derives_from=source)
-    investigation.studies[0].materials['samples'] = batch_create_materials(prototype_sample, n=1)
+
     sample_collection_protocol = Protocol(name="sample collection",
                                           protocol_type=OntologyAnnotation(term="sample collection"))
     investigation.studies[0].protocols.append(sample_collection_protocol)
@@ -79,12 +78,12 @@ def create_descriptor():
     investigation.studies[0].process_sequence.append(sample_collection_process);
 
 
-    sample = Sample(name="SAMEA3518466") #sample name
+    sample = Sample(name="SAMEA3518466", derives_from=source) #sample name
     characteristic1 = Characteristic(category="Organism", value="Homo sapiens")
     sample.characteristics.append(characteristic1)
     characteristic2 = Characteristic(category="Term Source Ref", value="NCBITaxon")
     sample.characteristics.append(characteristic2)
-    characteristic3 = Characteristic(category="Term Accession Number", value="http://")  #eol_link not need now
+    characteristic3 = Characteristic(category="Term Accession Number", value="http://eol_link")  #eol_link not need now
     sample.characteristics.append(characteristic3)
 
     # sample attribute
