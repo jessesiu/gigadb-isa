@@ -2,6 +2,7 @@ from isatools.model.v1 import *
 from isatools.isatab import dumps
 import xml.dom.minidom
 
+
 def create_descriptor():
     dom = xml.dom.minidom.parse('./dataset-100194.xml')
     root = dom.documentElement
@@ -16,7 +17,6 @@ def create_descriptor():
 
 
     # ------------ dataset ---------------
-
     investigation.studies[0].filename = "s_study.txt"
     investigation.studies[0].identifier = "10.5524/100001"
     investigation.studies[0].title = "test dataset"
@@ -84,31 +84,44 @@ def create_descriptor():
 
     investigation.studies[0].materials['samples'].append(sample)
 
-    #protocol
+    #protocols
     sample_collection_protocol = Protocol(name="sample collection",
                                           protocol_type=OntologyAnnotation(term="sample collection"))
     investigation.studies[0].protocols.append(sample_collection_protocol)
 
+    data_collection_protocol = Protocol(name="data collection",
+                                        protocol_type=OntologyAnnotation(term="data collection"))
+    investigation.studies[0].protocols.append(sample_collection_protocol)
+
+    # study-level process sequence is needed to declare samples
     sample_collection_process = Process(executes_protocol=sample_collection_protocol)
 
-
+    # Be careful here, this bit of code says to attach all sources to one process instance producing all samples
+    # This works right now as there is only one source and sample, but if there are multiple source->collection-sample
+    # instances, make sure you use a new Process object to hold them every time, otherwise the 1-1 relationship between
+    # source and sample may be lost!
     for src in investigation.studies[0].materials['sources']:
         sample_collection_process.inputs.append(src)
     for sam in investigation.studies[0].materials['samples']:
         sample_collection_process.outputs.append(sam)
 
-    investigation.studies[0].process_sequence.append(sample_collection_process);
+    investigation.studies[0].process_sequence.append(sample_collection_process)
     # ------------ file ---------------
-
+    
     assay = Assay(filename="a_assay.txt")
 
-    datafile = DataFile(filename="ftp://xxxxxxxxx")
+    datafile = DataFile(filename="ftp://xxxxxxxxx", label="Raw Data File")  # needs 'label' set as it is the column name
     datafile.comments = []
     comment10 = Comment(name="File Description", value="test file")
     datafile.comments.append(comment10)
 
-
     assay.data_files.append(datafile)
+
+    # assay-level process sequence is needed to declare data files
+    data_collection_process = Process(executes_protocol=data_collection_protocol)
+    data_collection_process.inputs.append(sample)
+    data_collection_process.outputs.append(datafile)
+    assay.process_sequence.append(data_collection_process)
 
     investigation.studies[0].assays.append(assay)
 
