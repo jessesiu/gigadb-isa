@@ -69,29 +69,26 @@ def create_descriptor():
     # ------------ sample ---------------
     source = Source(name='source_material')
     investigation.studies[0].materials['sources'].append(source)
-
-    sample_collection_protocol = Protocol(name="sample collection",
-                                          protocol_type=OntologyAnnotation(term="sample collection"))
-    investigation.studies[0].protocols.append(sample_collection_protocol)
-
-    sample_collection_process = Process(executes_protocol=sample_collection_protocol)
-    investigation.studies[0].process_sequence.append(sample_collection_process);
-
-
-    sample = Sample(name="SAMEA3518466", derives_from=source) #sample name
+    #sample name
+    sample = Sample(name="SAMEA3518466", derives_from=source)
+    #sample attribute
     characteristic1 = Characteristic(category="Organism", value="Homo sapiens")
     sample.characteristics.append(characteristic1)
     characteristic2 = Characteristic(category="Term Source Ref", value="NCBITaxon")
     sample.characteristics.append(characteristic2)
     characteristic3 = Characteristic(category="Term Accession Number", value="http://eol_link")  #eol_link not need now
     sample.characteristics.append(characteristic3)
-
-    # sample attribute
-
     characteristic4 = Characteristic(category="geolocation", value="10.222/2.00002222")  #eol_link not need now
     sample.characteristics.append(characteristic4)
 
     investigation.studies[0].materials['samples'].append(sample)
+
+    #protocol
+    sample_collection_protocol = Protocol(name="sample collection",
+                                          protocol_type=OntologyAnnotation(term="sample collection"))
+    investigation.studies[0].protocols.append(sample_collection_protocol)
+
+    sample_collection_process = Process(executes_protocol=sample_collection_protocol)
 
 
     for src in investigation.studies[0].materials['sources']:
@@ -99,7 +96,7 @@ def create_descriptor():
     for sam in investigation.studies[0].materials['samples']:
         sample_collection_process.outputs.append(sam)
 
-
+    investigation.studies[0].process_sequence.append(sample_collection_process);
     # ------------ file ---------------
 
     assay = Assay(filename="a_assay.txt")
