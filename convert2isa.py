@@ -3,7 +3,7 @@ from isatools.isatab import dumps
 import xml.dom.minidom
 
 def create_descriptor():
-    dom = xml.dom.minidom.parse('/Users/xiaosizhe/Desktop/api100194.xml')
+    dom = xml.dom.minidom.parse('./dataset-100194.xml')
     root = dom.documentElement
 
     data = root.getElementsByTagName('dataset')
@@ -116,7 +116,7 @@ def create_descriptor():
     investigation.studies[0].assays.append(assay)
 
     from isatools.isatab import dump
-    return dump(isa_obj=investigation, output_path='/Users/xiaosizhe/Desktop')
+    return dump(isa_obj=investigation, output_path='.')
 
 
 if __name__ == '__main__':
