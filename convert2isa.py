@@ -72,13 +72,14 @@ def create_descriptor():
     #sample name
     sample = Sample(name="SAMEA3518466", derives_from=source)
     #sample attribute
-    characteristic1 = Characteristic(category="Organism", value="Homo sapiens")
+    ncbitaxon = OntologySource(name='NCBITaxon', description="NCBI Taxonomy")
+    characteristic1 = Characteristic(category=OntologyAnnotation(term="Organism"), value=OntologyAnnotation(term="Homo Sapiens", term_source=ncbitaxon, term_accession="http://purl.bioontology.org/ontology/NCBITAXON/9606"))
     sample.characteristics.append(characteristic1)
-    characteristic2 = Characteristic(category="Term Source Ref", value="NCBITaxon")
-    sample.characteristics.append(characteristic2)
-    characteristic3 = Characteristic(category="Term Accession Number", value="http://eol_link")  #eol_link not need now
-    sample.characteristics.append(characteristic3)
-    characteristic4 = Characteristic(category="geolocation", value="10.222/2.00002222")  #eol_link not need now
+    # characteristic2 = Characteristic(category="Term Source Ref", value="NCBITaxon")
+    # sample.characteristics.append(characteristic2)
+    # characteristic3 = Characteristic(category="Term Accession Number", value="http://eol_link")  #eol_link not need now
+    # sample.characteristics.append(characteristic3)
+    characteristic4 = Characteristic(category=OntologyAnnotation(term="geolocation"), value="10.222/2.00002222")  #eol_link not need now
     sample.characteristics.append(characteristic4)
 
     investigation.studies[0].materials['samples'].append(sample)
