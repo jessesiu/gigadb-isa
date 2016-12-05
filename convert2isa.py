@@ -24,7 +24,7 @@ def create_descriptor():
     investigation.studies[0].public_release_date = "2016/11/11"
 
     # submitter
-    contact = Person(first_name="Alice", last_name="Robertson", affiliation="University of Life", email="tt@tt.com", roles="submitter")
+    contact = Person(first_name="Alice", last_name="Robertson", affiliation="University of Life", email="tt@tt.com", roles=[OntologyAnnotation(term='submitter')])
     investigation.studies[0].contacts.append(contact)
 
     publication = Publication(doi="10.5524/manuscript10002")
@@ -67,8 +67,18 @@ def create_descriptor():
     investigation.studies[0].comments.append(comment9)
 
     # ------------ sample ---------------
+    source = Source(name='source_material')
+    investigation.studies[0].materials['sources'].append(source)
+    prototype_sample = Sample(name='sample_material', derives_from=source)
+    investigation.studies[0].materials['samples'] = batch_create_materials(prototype_sample, n=1)
+    sample_collection_protocol = Protocol(name="sample collection",
+                                          protocol_type=OntologyAnnotation(term="sample collection"))
+    investigation.studies[0].protocols.append(sample_collection_protocol)
 
-    investigation.studies[0].samples=[]
+    sample_collection_process = Process(executes_protocol=sample_collection_protocol)
+    investigation.studies[0].process_sequence.append(sample_collection_process);
+
+
     sample = Sample(name="SAMEA3518466") #sample name
     characteristic1 = Characteristic(category="Organism", value="Homo sapiens")
     sample.characteristics.append(characteristic1)
@@ -82,8 +92,13 @@ def create_descriptor():
     characteristic4 = Characteristic(category="geolocation", value="10.222/2.00002222")  #eol_link not need now
     sample.characteristics.append(characteristic4)
 
+    investigation.studies[0].materials['samples'].append(sample)
 
-    investigation.studies[0].samples.append(sample)
+
+    for src in investigation.studies[0].materials['sources']:
+        sample_collection_process.inputs.append(src)
+    for sam in investigation.studies[0].materials['samples']:
+        sample_collection_process.outputs.append(sam)
 
 
     # ------------ file ---------------
@@ -98,8 +113,11 @@ def create_descriptor():
 
     assay.data_files.append(datafile)
 
+    investigation.studies[0].assays.append(assay)
+
     from isatools.isatab import dump
     return dump(isa_obj=investigation, output_path='/Users/xiaosizhe/Desktop')
+
 
 if __name__ == '__main__':
     print(create_descriptor())
